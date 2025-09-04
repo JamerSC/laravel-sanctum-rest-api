@@ -39,6 +39,7 @@
 
 1. Middleware & Error Handling
 
--
+-   Create task resource `php artisan make:resource V1\TaskResoure`
+-   Create task request `php artisan make:request V1\StoreTaskRequest`
 
 2.

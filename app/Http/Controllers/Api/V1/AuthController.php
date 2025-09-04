@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\LoginRequest;
+use App\Http\Requests\V1\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -10,14 +12,16 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     // registration
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
         // validate fields
-        $fields = $request->validate([
-            'name' => 'required|string',
-            'email'=> 'required|string|unique:users,email',
-            'password'=> 'required|string|confirmed',
-        ]);
+        // $fields = $request->validate([
+        //     'name' => 'required|string',
+        //     'email'=> 'required|string|unique:users,email',
+        //     'password'=> 'required|string|confirmed',
+        // ]);
+
+        $fields = $request->validated();
 
         // create new user
         $user = User::create([
@@ -31,22 +35,23 @@ class AuthController extends Controller
 
         // return new json response
         return response()->json([
+            'message' => 'User registered successfully',
             'user' => $user,
             'token'=> $token,
         ], 201); // CREATED
     }
 
     // account login
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
+        $fields = $request->validated();
+        
         // validate login details
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password'=> 'required|string'
-        ]);
+        // $fields = $request->validate(['email' => 'required|string','password'=> 'required|string']);
 
         // first find the user email
         $user = User::where('email', $fields['email'])->first();
+        
         // second check the user password
         if (!$user || !Hash::check($fields['password'], $user->password)) {
             return response()->json([

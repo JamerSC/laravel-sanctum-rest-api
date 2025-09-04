@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\TaskController;
+use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -44,5 +45,11 @@ Route::prefix('v1')->group(function () {
         Route::put('/tasks/{task}', [TaskController::class,'update']);
         // delete a tasks
         Route::delete('/tasks/{task}', [TaskController::class,'destroy']);
+
+        // get all users
+        Route::get('/users', [UserController::class,'index']);
+        
+        // get user with tasks
+        Route::get('/users/{id}/tasks', [UserController::class, 'showUserWithTasks']);
     });
 });
