@@ -20,17 +20,29 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+// /api/v1/**
 Route::prefix('v1')->group(function () {
     // register endpoint '/register'
     Route::post('/register', [AuthController::class, 'register']);
     // login endpoint '/login'
     Route::post('/login', [AuthController::class,'login']);
-
+    // Middleware using sanctum
     Route::middleware('auth:sanctum')->group(function () {
         // logout endpoint
         Route::post('/logout', [AuthController::class, 'logout']);
 
-        // task api resource
-        Route::apiResource('tasks', TaskController::class);
+        // apiResource() automatically creates the routes
+        //Route::apiResource('tasks', TaskController::class);
+
+        // get all tasks
+        Route::get('/tasks', [TaskController::class,'index']);
+        // get task by id
+        Route::get('/tasks/{task}', [TaskController::class, 'show']);
+        // create a tasks
+        Route::post('/tasks', [TaskController::class,'store']);
+        // update a tasks
+        Route::put('/tasks/{task}', [TaskController::class,'update']);
+        // delete a tasks
+        Route::delete('/tasks/{task}', [TaskController::class,'destroy']);
     });
 });
