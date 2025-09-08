@@ -110,6 +110,6 @@ class TaskController extends Controller
         return response()->json([
             'message' => 'Task deleted',
             new TaskResource($task) 
-        ], 200);
+        ], 204); // Http 204 - no content
     }
 }
